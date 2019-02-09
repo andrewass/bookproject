@@ -1,6 +1,6 @@
-package com.bookproject.entity;
+package com.bookproject.book;
 
-import com.bookproject.utility.BookCondition;
+import com.bookproject.author.Author;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -12,7 +12,7 @@ public class Book {
 
     @Id
     @GeneratedValue
-    @Column(name = "BOOK_ID", nullable = false)
+    @Column(name = "BOOK_ID")
     private Long bookId;
 
     @Column(name = "ISBN")
@@ -27,14 +27,14 @@ public class Book {
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
-    private User owner;
+    private com.bookproject.user.User owner;
 
-    @Column(name = "DATE_PUBLISHED")
+    @Column(name = "YEAR_PUBLISHED")
     private Date datePublished;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "BOOK_CONDITION", nullable = false)
     BookCondition condition;
 
-    public Book() {
-    }
+    public Book() { }
 }

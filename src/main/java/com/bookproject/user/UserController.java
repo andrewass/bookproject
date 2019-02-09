@@ -1,4 +1,4 @@
-package com.bookproject.controller;
+package com.bookproject.user;
 
 import org.springframework.web.bind.annotation.RestController;
 

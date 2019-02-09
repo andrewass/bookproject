@@ -1,5 +1,6 @@
-package com.bookproject.entity;
+package com.bookproject.author;
 
+import com.bookproject.book.Book;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -23,7 +24,10 @@ public class Author {
     @Column(name = "LAST_NAME")
     private String lastName;
 
-    public Author(){}
+    public Author(String firstName, String lastName){
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 
     public Author(String authorId){
         this.authorId = Long.parseLong(authorId);
