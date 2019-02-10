@@ -9,7 +9,7 @@ public class AddUserRequest {
 
     String lastName;
 
-    String email;
+    String emailAddress;
 
     String username;
 

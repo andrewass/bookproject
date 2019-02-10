@@ -3,5 +3,9 @@ package com.bookproject.misc;
 public enum Country {
     NORWAY,
     DENMARK,
-    SWEDEN
+    SWEDEN,
+    FRANCE,
+    SPAIN,
+    GERMANY,
+    FINLAND
 }

@@ -46,12 +46,16 @@ public class User {
 
     public User(){}
 
-    public User(String username, String firstName, String lastName, String password, Country residingCountry){
+    public User(String username, String firstName, String lastName,
+                String password, Country residingCountry, String emailAddress){
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.residingCountry = residingCountry;
+        this.emailAddress = emailAddress;
+        bookCoins = 0.00;
+        rating = 6;
     }
 
 }
