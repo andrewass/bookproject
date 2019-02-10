@@ -17,20 +17,21 @@ public class BookController {
 
 
     @GetMapping(value = "/all-books")
+    @CrossOrigin(origins = "http://localhost:3000")
     public List<Book> getAllBooks(){
         return bookRepository.findAll();
     }
 
 
     @GetMapping(value = "/get-book/{title}")
+    @CrossOrigin(origins = "http://localhost:3000")
     public Book getBookByTitle(@PathVariable String title){
         return bookRepository.findBookByTitle(title);
     }
 
     @PostMapping("/add-book")
-    //@CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://localhost:3000")
     public void registerBook(@RequestBody Book book) {
-        //storingAuthorIfNotAlreadyStored(book.getAuthor());
         bookRepository.save(book);
     }
 }

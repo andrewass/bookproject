@@ -16,6 +16,7 @@ public class User {
     @Column(name = "USER_ID")
     private Long userId;
 
+    @Column(nullable = false)
     private String username;
 
     @OneToMany(mappedBy = "owner")
@@ -24,8 +25,17 @@ public class User {
     @Column(nullable = false)
     private Integer rating;
 
+    @Column(name = "FIRST_NAME", nullable = false)
+    private String firstName;
+
+    @Column(name = "LAST_NAME", nullable = false)
+    private String lastName;
+
     @Column(nullable = false)
     private Double bookCoins;
+
+    @Column(name = "EMAIL_ADDRESS", nullable = false)
+    private String emailAddress;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "RESIDING_COUNTRY")

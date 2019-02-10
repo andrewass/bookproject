@@ -11,6 +11,8 @@ public class AddUserRequest {
 
     String email;
 
+    String username;
+
     String password;
 
     String country;
