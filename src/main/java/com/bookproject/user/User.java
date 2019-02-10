@@ -32,6 +32,9 @@ public class User {
     private String lastName;
 
     @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
     private Double bookCoins;
 
     @Column(name = "EMAIL_ADDRESS", nullable = false)
@@ -40,5 +43,15 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "RESIDING_COUNTRY")
     private Country residingCountry;
+
+    public User(){}
+
+    public User(String username, String firstName, String lastName, String password, Country residingCountry){
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+        this.residingCountry = residingCountry;
+    }
 
 }
