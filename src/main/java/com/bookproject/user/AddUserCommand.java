@@ -14,12 +14,13 @@ import java.util.Arrays;
 
 class AddUserCommand {
 
-    private AddUserCommand(){}
+    private AddUserCommand() {
+    }
 
     static User execute(AddUserRequest request, UserRepository repository) throws RequestValidationException,
             NoSuchAlgorithmException, InvalidKeySpecException {
         validate(request, repository);
-        User user = new User(request.username, request.firstName, request.lastName,
+        User user = new User(request.getUsername(), request.getFirstName(), request.getLastName(),
                 getHashedPassword(request.getPassword()), Country.valueOf(request.getCountry().toUpperCase()),
                 request.getEmailAddress());
         repository.save(user);
@@ -40,7 +41,7 @@ class AddUserCommand {
 
     private static void validate(AddUserRequest request, UserRepository repository) throws RequestValidationException {
         if (Arrays.stream(Country.values()).noneMatch(t -> t.name().equalsIgnoreCase(request.getCountry()))) {
-            throw new RequestValidationException("Invalid country submitted : "+request.getCountry());
+            throw new RequestValidationException("Invalid country submitted : " + request.getCountry());
         }
         if (repository.findByUsername(request.getUsername().toLowerCase()) != null) {
             throw new RequestValidationException("Username already exists");

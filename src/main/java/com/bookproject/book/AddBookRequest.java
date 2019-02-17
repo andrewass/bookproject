@@ -3,17 +3,17 @@ package com.bookproject.book;
 import lombok.Data;
 
 @Data
-public class AddBookRequest {
+class AddBookRequest {
 
-    String username;
+    private String username;
 
-    String title;
+    private String title;
 
-    String author_firstName;
+    private String author_firstName;
 
-    String author_lastName;
+    private String author_lastName;
 
-    Integer publishedYear;
+    private Integer publishedYear;
 
-    String condition;
+    private String condition;
 }

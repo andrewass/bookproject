@@ -36,5 +36,7 @@ public class Book {
     @Column(name = "BOOK_CONDITION", nullable = false)
     BookCondition condition;
 
-    public Book() { }
+    public Book(String title) {
+        this.title = title;
+    }
 }
