@@ -3,17 +3,17 @@ package com.bookproject.user;
 import lombok.Data;
 
 @Data
-public class AddUserRequest {
+class AddUserRequest {
 
-    String firstName;
+    private String firstName;
 
-    String lastName;
+    private String lastName;
 
-    String emailAddress;
+    private String emailAddress;
 
-    String username;
+    private String username;
 
-    String password;
+    private String password;
 
-    String country;
+    private String country;
 }

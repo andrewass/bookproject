@@ -7,5 +7,6 @@ public enum Country {
     FRANCE,
     SPAIN,
     GERMANY,
-    FINLAND
+    FINLAND,
+    USA
 }
