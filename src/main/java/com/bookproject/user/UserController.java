@@ -29,7 +29,21 @@ public class UserController {
 
     @GetMapping("/sign-in-user")
     @CrossOrigin(origins = "http://localhost:3000")
-    public ResponseEntity<User> signInUser() {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<User> signInUser(@RequestParam String username, @RequestParam String password) {
+        try{
+            User user = FetchStoredUserCommand.execute(username, password, userRepository);
+            if(user != null){
+                return new ResponseEntity<>(user, HttpStatus.OK);
+            }
+            else{
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
+        catch (Exception e){
+            Logger logger = Logger.getLogger(UserController.class.getName());
+            logger.log(Level.INFO, e.getMessage());
+        }
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
+
     }
 }

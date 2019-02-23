@@ -4,13 +4,11 @@ import com.bookproject.exception.RequestValidationException;
 import com.bookproject.misc.Country;
 import org.apache.commons.validator.routines.EmailValidator;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
 import java.util.Arrays;
+
+import static com.bookproject.user.UserUtils.getHashedPassword;
 
 class AddUserCommand {
 
@@ -21,22 +19,11 @@ class AddUserCommand {
             NoSuchAlgorithmException, InvalidKeySpecException {
         validate(request, repository);
         User user = new User(request.getUsername(), request.getFirstName(), request.getLastName(),
-                getHashedPassword(request.getPassword()), Country.valueOf(request.getCountry().toUpperCase()),
+                getHashedPassword(request.getPassword()),
+                Country.valueOf(request.getCountry().toUpperCase()),
                 request.getEmailAddress());
         repository.save(user);
         return user;
-    }
-
-    private static String getHashedPassword(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[16];
-        random.nextBytes(salt);
-
-        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
-        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-
-        byte[] hash = factory.generateSecret(spec).getEncoded();
-        return Arrays.toString(hash);
     }
 
     private static void validate(AddUserRequest request, UserRepository repository) throws RequestValidationException {
