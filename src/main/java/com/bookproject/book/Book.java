@@ -1,7 +1,10 @@
 package com.bookproject.book;
 
 import com.bookproject.author.Author;
+import com.bookproject.user.User;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -27,16 +30,25 @@ public class Book {
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
-    private com.bookproject.user.User owner;
+    private User owner;
 
     @Column(name = "YEAR_PUBLISHED")
     private Date datePublished;
+
+    @CreationTimestamp
+    @Column(name = "DATE_CREATED")
+    private Date dateCreated;
+
+    @UpdateTimestamp
+    @Column(name = "DATE_CHANGED")
+    private Date dateChanged;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "BOOK_CONDITION", nullable = false)
     BookCondition condition;
 
-    public Book(String title) {
-        this.title = title;
-    }
+    public Book(){}
+
+
+
 }

@@ -3,6 +3,8 @@ package com.bookproject.book;
 import com.bookproject.author.Author;
 import com.bookproject.author.AuthorRepository;
 import com.bookproject.exception.RequestValidationException;
+import com.bookproject.user.User;
+import com.bookproject.user.UserRepository;
 
 import java.util.Arrays;
 
@@ -11,16 +13,24 @@ public class AddBookCommand {
     private AddBookCommand() {
     }
 
-    public static Book execute(AddBookRequest request, BookRepository repository, AuthorRepository authorRepository)
+    public static Book execute(AddBookRequest request, BookRepository bookRepository,
+                               AuthorRepository authorRepository, UserRepository userRepository)
             throws RequestValidationException {
         validate(request);
-        Author author = findAuthor();
-        Book book = new Book(request.getTitle());
-        //repository.save(book);
-        return book;
+        Author author = findAuthor(request.getAuthor_firstname(), request.getAuthor_lastname(), authorRepository);
+        User user = findUser(request.getUsername(), userRepository);
+        return new BookBuilder()
+                .withTitle(request.getTitle())
+                .withCondition(BookCondition.valueOf(request.getCondition().toUpperCase()))
+                .withAuthor(author)
+                .build();
     }
 
-    private static Author findAuthor() {
+    private static User findUser(String username, UserRepository repository) {
+        return null;
+    }
+
+    private static Author findAuthor(String firstname, String lastname, AuthorRepository repository) {
         return null;
     }
 
@@ -29,14 +39,8 @@ public class AddBookCommand {
     }
 
     private static void validate(AddBookRequest request) throws RequestValidationException {
-        if (request.getUsername() == null) {
-            throw new RequestValidationException("Username must be specified");
-        }
-        if (request.getAuthor_firstName() == null) {
-            throw new RequestValidationException("Authors first name must be specified");
-        }
-        if (request.getAuthor_lastName() == null) {
-            throw new RequestValidationException("Authors last name must be specified");
+        if (request.getTitle() == null) {
+            throw new RequestValidationException("Title must be specified");
         }
         if (request.getCondition() == null) {
             throw new RequestValidationException("Book condition must be specified");
