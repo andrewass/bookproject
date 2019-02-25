@@ -1,6 +1,7 @@
 package com.bookproject.book;
 
 import com.bookproject.author.AuthorRepository;
+import com.bookproject.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +20,14 @@ public class BookController {
     @Autowired
     AuthorRepository authorRepository;
 
+    @Autowired
+    UserRepository userRepository;
 
     @GetMapping(value = "/all-books")
     @CrossOrigin(origins = "http://localhost:3000")
     public List<Book> getAllBooks() {
         return bookRepository.findAll();
     }
-
 
     @GetMapping(value = "/get-book/{title}")
     @CrossOrigin(origins = "http://localhost:3000")
@@ -37,12 +39,24 @@ public class BookController {
     @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<Book> addBook(@RequestBody AddBookRequest request) {
         try {
-            Book book = AddBookCommand.execute(request, bookRepository, authorRepository);
+            Book book = AddBookCommand.execute(request, authorRepository, userRepository);
+            bookRepository.save(book);
             return new ResponseEntity<>(book, HttpStatus.OK);
         } catch (Exception e) {
             Logger logger = Logger.getLogger(BookController.class.getName());
             logger.log(Level.INFO, e.getMessage());
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-        return new ResponseEntity<>(HttpStatus.CONFLICT);
+    }
+
+    @GetMapping("/recent-books")
+    @CrossOrigin(origins = "http://localhost:3000")
+    public ResponseEntity<List<Book>> getRecentBooks(@RequestParam Integer count) {
+        try {
+            List<Book> recentBooks = FindRecentAddedBooksCommand.execute(count, bookRepository);
+            return new ResponseEntity<>(recentBooks, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 }
