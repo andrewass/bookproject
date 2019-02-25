@@ -2,12 +2,15 @@ package com.bookproject.user;
 
 import com.bookproject.book.Book;
 import com.bookproject.misc.Country;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity(name = "T_USER")
 public class User {
 
@@ -20,6 +23,7 @@ public class User {
     private String username;
 
     @OneToMany(mappedBy = "owner")
+    @JsonManagedReference
     private List<Book> bookList;
 
     @Column(nullable = false)
@@ -44,10 +48,11 @@ public class User {
     @Column(name = "RESIDING_COUNTRY")
     private Country residingCountry;
 
-    public User(){}
+    public User() {
+    }
 
     public User(String username, String firstName, String lastName,
-                String password, Country residingCountry, String emailAddress){
+                String password, Country residingCountry, String emailAddress) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -57,5 +62,4 @@ public class User {
         bookCoins = 0.00;
         rating = 6;
     }
-
 }

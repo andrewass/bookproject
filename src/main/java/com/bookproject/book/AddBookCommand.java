@@ -7,14 +7,14 @@ import com.bookproject.user.User;
 import com.bookproject.user.UserRepository;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class AddBookCommand {
 
     private AddBookCommand() {
     }
 
-    public static Book execute(AddBookRequest request, BookRepository bookRepository,
-                               AuthorRepository authorRepository, UserRepository userRepository)
+    public static Book execute(AddBookRequest request, AuthorRepository authorRepository, UserRepository userRepository)
             throws RequestValidationException {
         validate(request);
         Author author = findAuthor(request.getAuthor_firstname(), request.getAuthor_lastname(), authorRepository);
@@ -23,16 +23,26 @@ public class AddBookCommand {
                 .withTitle(request.getTitle())
                 .withCondition(BookCondition.valueOf(request.getCondition().toUpperCase()))
                 .withAuthor(author)
+                .withOwner(user)
+                .withPublishedYear(request.getPublishedYear())
                 .build();
     }
 
     private static User findUser(String username, UserRepository repository) {
-        return null;
+        if(username == null) {
+            return null;
+        }
+        return repository.findByUsername(username);
     }
 
     private static Author findAuthor(String firstname, String lastname, AuthorRepository repository) {
-        return null;
+        if(firstname == null || lastname == null){
+            return null;
+        }
+        List<Author> authors = repository.findAuthorByName(firstname, lastname);
+        return authors.isEmpty() ? repository.save(new Author(firstname , lastname)) : authors.get(0);
     }
+
 
     private static Author createAuthor() {
         return null;

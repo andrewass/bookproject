@@ -13,6 +13,7 @@ class BookBuilder {
     private Author author;
     private Date datePublished;
     private BookCondition bookCondition;
+    private Integer publishedYear;
 
 
     public BookBuilder withTitle(String title){
@@ -35,11 +36,20 @@ class BookBuilder {
         return this;
     }
 
+    public BookBuilder withPublishedYear(Integer publishedYear){
+        this.publishedYear = publishedYear;
+        return this;
+    }
+
+
+
     public Book build(){
         Book book = new Book();
+        book.setTitle(this.title);
         book.setAuthor(this.author);
         book.setCondition(this.bookCondition);
         book.setOwner(this.owner);
+        book.setYearPublished(this.publishedYear);
         return book;
     }
 }

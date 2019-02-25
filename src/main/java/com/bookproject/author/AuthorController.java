@@ -18,16 +18,6 @@ public class AuthorController {
         return authorRepository.findAll();
     }
 
-
-    @GetMapping(value = "/get-author/{name}")
-    public ResponseEntity<List<Author>> getAuthorByLastName(@PathVariable String lastName){
-        List<Author> authors = authorRepository.findAuthorBylastName(lastName);
-        if(authors.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(authors, HttpStatus.OK);
-    }
-
     @PostMapping("/add-author")
     @CrossOrigin(origins = "http://localhost:3000")
     ResponseEntity<Author> addAuthor(@RequestBody Author author) {
