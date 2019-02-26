@@ -3,7 +3,7 @@ package com.bookproject.user;
 import lombok.Data;
 
 @Data
-public class FetchStoredUserRequest{
+public class FetchStoredUserRequest {
 
     private String username;
 

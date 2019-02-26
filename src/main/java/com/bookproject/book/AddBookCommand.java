@@ -29,18 +29,18 @@ public class AddBookCommand {
     }
 
     private static User findUser(String username, UserRepository repository) {
-        if(username == null) {
+        if (username == null) {
             return null;
         }
         return repository.findByUsername(username);
     }
 
     private static Author findAuthor(String firstname, String lastname, AuthorRepository repository) {
-        if(firstname == null || lastname == null){
+        if (firstname == null || lastname == null) {
             return null;
         }
         List<Author> authors = repository.findAuthorByName(firstname, lastname);
-        return authors.isEmpty() ? repository.save(new Author(firstname , lastname)) : authors.get(0);
+        return authors.isEmpty() ? repository.save(new Author(firstname, lastname)) : authors.get(0);
     }
 
 

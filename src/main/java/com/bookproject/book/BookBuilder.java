@@ -16,7 +16,7 @@ class BookBuilder {
     private Integer publishedYear;
 
 
-    public BookBuilder withTitle(String title){
+    public BookBuilder withTitle(String title) {
         this.title = title;
         return this;
     }
@@ -26,24 +26,22 @@ class BookBuilder {
         return this;
     }
 
-    public BookBuilder withOwner(User owner){
+    public BookBuilder withOwner(User owner) {
         this.owner = owner;
         return this;
     }
 
-    public BookBuilder withAuthor(Author author){
+    public BookBuilder withAuthor(Author author) {
         this.author = author;
         return this;
     }
 
-    public BookBuilder withPublishedYear(Integer publishedYear){
+    public BookBuilder withPublishedYear(Integer publishedYear) {
         this.publishedYear = publishedYear;
         return this;
     }
 
-
-
-    public Book build(){
+    public Book build() {
         Book book = new Book();
         book.setTitle(this.title);
         book.setAuthor(this.author);
