@@ -9,6 +9,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     Book findBookByTitle(String title);
 
-    @Query(value = "SELECT * From T_BOOK b LIMIT ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM T_BOOK b ORDER BY b.DATE_CREATED DESC LIMIT ?1 ", nativeQuery = true)
     List<Book> findRecentlyAddedBooks(Integer count);
 }

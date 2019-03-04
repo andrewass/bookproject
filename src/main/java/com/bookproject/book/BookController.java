@@ -1,6 +1,7 @@
 package com.bookproject.book;
 
 import com.bookproject.author.AuthorRepository;
+import com.bookproject.misc.PropertyUtils;
 import com.bookproject.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,9 @@ public class BookController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    PropertyUtils propertyUtils;
 
     @GetMapping(value = "/all-books")
     @CrossOrigin(origins = "http://localhost:3000")
@@ -53,7 +57,7 @@ public class BookController {
     @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<List<Book>> getRecentBooks(@RequestParam Integer count) {
         try {
-            List<Book> recentBooks = FindRecentAddedBooksCommand.execute(count, bookRepository);
+            List<Book> recentBooks = FindRecentAddedBooksCommand.execute(count, bookRepository, propertyUtils.getApiKey());
             return new ResponseEntity<>(recentBooks, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
