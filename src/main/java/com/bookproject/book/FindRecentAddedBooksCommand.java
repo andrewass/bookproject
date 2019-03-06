@@ -12,7 +12,9 @@ public class FindRecentAddedBooksCommand {
         books.forEach(book -> {
             if (book.getImageUrl() == null) {
                 Map<String, String> fieldValues = getFieldsForBook(book.getTitle(), apiKey);
-
+                book.setGoodreadsID(Long.parseLong(fieldValues.get("goodreads_id")));
+                book.setImageUrl(fieldValues.get("image_url"));
+                repository.save(book);
             }
         });
         return books;

@@ -16,7 +16,7 @@ public class FetchStoredUserCommand {
             NoSuchAlgorithmException, InvalidKeySpecException {
         validate(username, password);
         User retrievedUser = repository.findByUsername(username);
-        if (retrievedUser != null && !retrievedUser.getPassword().equals(getHashedPassword(password))) {
+        if (retrievedUser == null || !retrievedUser.getPassword().equals(getHashedPassword(password))) {
             return null;
         }
         return retrievedUser;

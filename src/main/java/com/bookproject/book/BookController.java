@@ -16,16 +16,16 @@ import java.util.logging.Logger;
 public class BookController {
 
     @Autowired
-    BookRepository bookRepository;
+    private BookRepository bookRepository;
 
     @Autowired
-    AuthorRepository authorRepository;
+    private AuthorRepository authorRepository;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    PropertyUtils propertyUtils;
+    private PropertyUtils propertyUtils;
 
     @GetMapping(value = "/all-books")
     @CrossOrigin(origins = "http://localhost:3000")

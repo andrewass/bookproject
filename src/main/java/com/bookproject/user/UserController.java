@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 public class UserController {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @PostMapping("/add-user")
     @CrossOrigin(origins = "http://localhost:3000")
@@ -42,6 +42,5 @@ public class UserController {
             logger.log(Level.INFO, e.getMessage());
         }
         return new ResponseEntity<>(HttpStatus.CONFLICT);
-
     }
 }
