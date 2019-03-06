@@ -2,12 +2,11 @@ package com.bookproject.user;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
+class UserUtils {
 
-public class UserUtils {
+    private UserUtils(){}
 
-    static String getHashedPassword(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    static String getHashedPassword(String password) {
         return DigestUtils.sha1Hex(password);
     }
 }

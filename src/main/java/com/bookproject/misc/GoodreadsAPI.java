@@ -26,8 +26,6 @@ import java.util.Map;
 
 public class GoodreadsAPI {
 
-    private static HttpURLConnection httpURLConnection;
-
     private GoodreadsAPI() {
     }
 
@@ -39,10 +37,10 @@ public class GoodreadsAPI {
             keyValues.add(new BasicNameValuePair("key", apiKey));
             keyValues.add(new BasicNameValuePair("search[field]", "title"));
             URL url = generateUrlWithParameters("https://www.goodreads.com/search/index.xml", keyValues);
-            httpURLConnection = (HttpURLConnection) url.openConnection();
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("GET");
             if (httpURLConnection.getResponseCode() == 200) {
-                String xmlResponse = getXMLfromResponse();
+                String xmlResponse = getXMLfromResponse(httpURLConnection);
                 fieldValues.put("goodreads_id", fetchValueFromXML(
                         "/GoodreadsResponse/search/results/work/id", xmlResponse));
                 fieldValues.put("image_url", fetchValueFromXML(
@@ -56,7 +54,7 @@ public class GoodreadsAPI {
         return null;
     }
 
-    private static String getXMLfromResponse() throws IOException {
+    private static String getXMLfromResponse(HttpURLConnection httpURLConnection) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
         StringBuilder builder = new StringBuilder();
         builder.append(reader.readLine());
@@ -69,7 +67,7 @@ public class GoodreadsAPI {
     }
 
     private static String fetchValueFromXML(String expression, String responseXML) throws
-            ParserConfigurationException, IOException, SAXException, XPathExpressionException, XPathExpressionException {
+            ParserConfigurationException, IOException, SAXException, XPathExpressionException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document document = builder.parse(new InputSource(new StringReader(responseXML)));
