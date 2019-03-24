@@ -22,8 +22,7 @@ class AddUserCommand {
                 getHashedPassword(request.getPassword()),
                 Country.valueOf(request.getCountry().toUpperCase()),
                 request.getEmailAddress());
-        repository.save(user);
-        return user;
+        return repository.save(user);
     }
 
     private static void validate(AddUserRequest request, UserRepository repository) throws RequestValidationException {
@@ -31,13 +30,13 @@ class AddUserCommand {
             throw new RequestValidationException("Invalid country submitted : " + request.getCountry());
         }
         if (repository.findByUsername(request.getUsername().toLowerCase()) != null) {
-            throw new RequestValidationException("Username already exists");
+            throw new RequestValidationException("Username already exists : "+request.getUsername());
         }
         if (!EmailValidator.getInstance().isValid(request.getEmailAddress())) {
-            throw new RequestValidationException("Invalid emailAddress address submitted");
+            throw new RequestValidationException("Invalid emailAddress address submitted : "+request.getEmailAddress());
         }
         if (repository.findByEmailAddress(request.getEmailAddress()) != null) {
-            throw new RequestValidationException("Submitted emailAddress address already registered");
+            throw new RequestValidationException("Submitted emailAddress address already registered : "+request.getEmailAddress());
         }
     }
 }

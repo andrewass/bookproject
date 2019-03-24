@@ -33,11 +33,9 @@ public class BookController {
         return bookRepository.findAll();
     }
 
-    @GetMapping(value = "/get-book/{title}")
+    @GetMapping("/book")
     @CrossOrigin(origins = "http://localhost:3000")
-    public Book getBookByTitle(@PathVariable String title) {
-        return bookRepository.findBookByTitle(title);
-    }
+    public Book getBookById(@RequestParam Long bookId){ return bookRepository.findBookByBookId(bookId); }
 
     @PostMapping("/add-book")
     @CrossOrigin(origins = "http://localhost:3000")
