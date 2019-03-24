@@ -7,6 +7,8 @@ import static com.bookproject.misc.GoodreadsAPI.getFieldsForBook;
 
 public class FindRecentAddedBooksCommand {
 
+    private FindRecentAddedBooksCommand(){}
+
     public static List<Book> execute(Integer count, BookRepository repository, String apiKey) {
         List<Book> books = repository.findRecentlyAddedBooks(count);
         books.forEach(book -> {

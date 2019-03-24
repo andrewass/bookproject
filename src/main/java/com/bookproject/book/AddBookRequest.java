@@ -9,9 +9,9 @@ class AddBookRequest {
 
     private String title;
 
-    private String author_firstname;
+    private String authorFirstname;
 
-    private String author_lastname;
+    private String authorLastname;
 
     private Integer publishedYear;
 

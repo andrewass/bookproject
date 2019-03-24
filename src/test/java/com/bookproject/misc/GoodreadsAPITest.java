@@ -1,5 +1,5 @@
 package com.bookproject.misc;
 
-class GoodreadsAPITest {
+public class GoodreadsAPITest {
 
 }

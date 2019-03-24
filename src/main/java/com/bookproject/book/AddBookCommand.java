@@ -17,7 +17,7 @@ public class AddBookCommand {
     public static Book execute(AddBookRequest request, AuthorRepository authorRepository, UserRepository userRepository)
             throws RequestValidationException {
         validate(request);
-        Author author = findAuthor(request.getAuthor_firstname(), request.getAuthor_lastname(), authorRepository);
+        Author author = findAuthor(request.getAuthorFirstname(), request.getAuthorLastname(), authorRepository);
         User user = findUser(request.getUsername(), userRepository);
         return new BookBuilder()
                 .withTitle(request.getTitle())
@@ -41,11 +41,6 @@ public class AddBookCommand {
         }
         List<Author> authors = repository.findAuthorByName(firstname, lastname);
         return authors.isEmpty() ? repository.save(new Author(firstname, lastname)) : authors.get(0);
-    }
-
-
-    private static Author createAuthor() {
-        return null;
     }
 
     private static void validate(AddBookRequest request) throws RequestValidationException {

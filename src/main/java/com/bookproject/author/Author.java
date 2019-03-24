@@ -28,6 +28,9 @@ public class Author {
     @Column(name = "LAST_NAME")
     private String lastName;
 
+    @Column(name = "IMAGE_URL")
+    private String imageURL;
+
     public Author(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
