@@ -3,7 +3,7 @@ package com.bookproject.book;
 import com.bookproject.author.Author;
 import com.bookproject.user.User;
 
-class BookBuilder {
+public class BookBuilder {
 
     private String title;
     private User owner;
@@ -12,32 +12,32 @@ class BookBuilder {
     private Integer publishedYear;
 
 
-    BookBuilder withTitle(String title) {
+    public BookBuilder withTitle(String title) {
         this.title = title;
         return this;
     }
 
-    BookBuilder withCondition(BookCondition condition) {
+    public BookBuilder withCondition(BookCondition condition) {
         this.bookCondition = condition;
         return this;
     }
 
-    BookBuilder withOwner(User owner) {
+    public BookBuilder withOwner(User owner) {
         this.owner = owner;
         return this;
     }
 
-    BookBuilder withAuthor(Author author) {
+    public BookBuilder withAuthor(Author author) {
         this.author = author;
         return this;
     }
 
-    BookBuilder withPublishedYear(Integer publishedYear) {
+    public BookBuilder withPublishedYear(Integer publishedYear) {
         this.publishedYear = publishedYear;
         return this;
     }
 
-    Book build() {
+    public Book build() {
         Book book = new Book();
         book.setTitle(this.title);
         book.setAuthor(this.author);

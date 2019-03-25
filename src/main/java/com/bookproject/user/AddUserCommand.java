@@ -22,7 +22,7 @@ class AddUserCommand {
                 getHashedPassword(request.getPassword()),
                 Country.valueOf(request.getCountry().toUpperCase()),
                 request.getEmailAddress());
-        return repository.save(user);
+        return user;
     }
 
     private static void validate(AddUserRequest request, UserRepository repository) throws RequestValidationException {

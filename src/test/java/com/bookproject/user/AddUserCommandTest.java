@@ -9,9 +9,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
 import static com.bookproject.user.AddUserCommand.execute;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -27,7 +25,6 @@ public class AddUserCommandTest {
     void init() {
         initMocks(this);
         createUserRequest();
-        when(userRepository.save(any(User.class))).thenReturn(new User());
     }
 
     @Test
@@ -46,7 +43,7 @@ public class AddUserCommandTest {
                 assertThrows(RequestValidationException.class,
                         () -> execute(addUserRequest, userRepository));
 
-        assertTrue(exception.getMessage().equals("Invalid country submitted : "+INVALID_COUNTRY));
+        assertTrue(exception.getMessage().equals("Invalid country submitted : " + INVALID_COUNTRY));
     }
 
     @Test
@@ -57,7 +54,7 @@ public class AddUserCommandTest {
                 assertThrows(RequestValidationException.class,
                         () -> execute(addUserRequest, userRepository));
 
-        assertTrue(exception.getMessage().equals("Username already exists : "+addUserRequest.getUsername()));
+        assertTrue(exception.getMessage().equals("Username already exists : " + addUserRequest.getUsername()));
     }
 
     @Test
@@ -68,7 +65,7 @@ public class AddUserCommandTest {
                 assertThrows(RequestValidationException.class,
                         () -> execute(addUserRequest, userRepository));
 
-        assertTrue(exception.getMessage().equals("Invalid emailAddress address submitted : "+INVALID_EMAIL));
+        assertTrue(exception.getMessage().equals("Invalid emailAddress address submitted : " + INVALID_EMAIL));
     }
 
     @Test
@@ -79,11 +76,8 @@ public class AddUserCommandTest {
                 assertThrows(RequestValidationException.class,
                         () -> execute(addUserRequest, userRepository));
 
-        assertTrue(exception.getMessage().equals("Submitted emailAddress address already registered : "+addUserRequest.getEmailAddress()));
+        assertTrue(exception.getMessage().equals("Submitted emailAddress address already registered : " + addUserRequest.getEmailAddress()));
     }
-
-
-
 
     private void createUserRequest() {
         addUserRequest = new AddUserRequest();
@@ -94,6 +88,4 @@ public class AddUserCommandTest {
         addUserRequest.setCountry("NORWAY");
         addUserRequest.setEmailAddress("testmail@gmail.com");
     }
-
-
 }
