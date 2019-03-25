@@ -7,7 +7,6 @@ import com.bookproject.user.User;
 import com.bookproject.user.UserRepository;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class AddBookCommand {
 
@@ -39,19 +38,19 @@ public class AddBookCommand {
         if (firstname == null || lastname == null) {
             return null;
         }
-        List<Author> authors = repository.findAuthorByName(firstname, lastname);
-        return authors.isEmpty() ? repository.save(new Author(firstname, lastname)) : authors.get(0);
+        Author author = repository.findAuthorByName(firstname, lastname);
+        return author == null ? repository.save(new Author(firstname, lastname)) : author;
     }
 
     private static void validate(AddBookRequest request) throws RequestValidationException {
         if (request.getTitle() == null) {
-            throw new RequestValidationException("Title must be specified");
+            throw new RequestValidationException("Title must be specified when adding book");
         }
         if (request.getCondition() == null) {
-            throw new RequestValidationException("Book condition must be specified");
+            throw new RequestValidationException("Book condition must be specified when adding book");
         }
         if (Arrays.stream(BookCondition.values()).noneMatch(bc -> bc.name().equalsIgnoreCase(request.getCondition()))) {
-            throw new RequestValidationException("Specified book condition is not a valid option");
+            throw new RequestValidationException("Specified book condition is not a valid option : "+request.getCondition());
         }
     }
 }

@@ -14,12 +14,18 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @GetMapping("/user/{username}")
+    @CrossOrigin(origins = "http://localhost:3000")
+    public User getUserByUsername(@PathVariable String username){
+        return userRepository.findByUsername(username);
+    }
+
     @PostMapping("/add-user")
     @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<User> addUser(@RequestBody AddUserRequest request) {
         try {
             User user = AddUserCommand.execute(request, userRepository);
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            return new ResponseEntity<>(userRepository.save(user), HttpStatus.OK);
         } catch (Exception e) {
             Logger logger = Logger.getLogger(UserController.class.getName());
             logger.log(Level.INFO, e.getMessage());
