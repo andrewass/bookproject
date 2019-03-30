@@ -57,6 +57,7 @@ public class Book {
     @Column(name = "DATE_CHANGED")
     private Date dateChanged;
 
+    //Empty Constructor
     public Book() {
     }
 }

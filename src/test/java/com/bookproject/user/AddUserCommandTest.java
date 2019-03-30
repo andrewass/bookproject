@@ -14,7 +14,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class AddUserCommandTest {
+class AddUserCommandTest {
 
     @Mock
     private UserRepository userRepository;
@@ -28,7 +28,7 @@ public class AddUserCommandTest {
     }
 
     @Test
-    public void shouldSaveUserWhenRequestDataIsValid() throws NoSuchAlgorithmException, RequestValidationException,
+    void shouldSaveUserWhenRequestDataIsValid() throws NoSuchAlgorithmException, RequestValidationException,
             InvalidKeySpecException {
 
         User addedUser = execute(addUserRequest, userRepository);
@@ -36,7 +36,7 @@ public class AddUserCommandTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenCountryIsInvalid() {
+    void shouldThrowExceptionWhenCountryIsInvalid() {
         final String INVALID_COUNTRY = "UTOPIA";
         addUserRequest.setCountry(INVALID_COUNTRY);
         RequestValidationException exception =
@@ -47,7 +47,7 @@ public class AddUserCommandTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenUserIsAlreadyStored() {
+    void shouldThrowExceptionWhenUserIsAlreadyStored() {
         when(userRepository.findByUsername(any(String.class))).thenReturn(new User());
 
         RequestValidationException exception =
@@ -58,7 +58,7 @@ public class AddUserCommandTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenEmailAddressIsInvalid() {
+    void shouldThrowExceptionWhenEmailAddressIsInvalid() {
         final String INVALID_EMAIL = "testmail$gmail.com";
         addUserRequest.setEmailAddress(INVALID_EMAIL);
         RequestValidationException exception =
@@ -69,7 +69,7 @@ public class AddUserCommandTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenEmailAddressIsAlreadyStored() {
+    void shouldThrowExceptionWhenEmailAddressIsAlreadyStored() {
         when(userRepository.findByEmailAddress(any(String.class))).thenReturn(new User());
 
         RequestValidationException exception =

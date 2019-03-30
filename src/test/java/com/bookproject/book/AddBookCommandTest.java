@@ -15,7 +15,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class AddBookCommandTest {
+class AddBookCommandTest {
 
     @Mock
     private AuthorRepository authorRepository;
@@ -26,7 +26,7 @@ public class AddBookCommandTest {
     private AddBookRequest addBookRequest;
 
     @BeforeEach
-    public void init() {
+    void init() {
         initMocks(this);
         when(userRepository.findByUsername(any(String.class))).thenReturn(new User());
         when(authorRepository.save(any(Author.class))).thenReturn(new Author());
@@ -34,7 +34,7 @@ public class AddBookCommandTest {
     }
 
     @Test
-    public void shouldAddBookWhenRequestContainsValidValues() throws RequestValidationException {
+    void shouldAddBookWhenRequestContainsValidValues() throws RequestValidationException {
         when(authorRepository.findAuthorByName(any(String.class), any(String.class))).thenReturn(new Author());
         Book book = execute(addBookRequest, authorRepository, userRepository);
 
@@ -45,7 +45,7 @@ public class AddBookCommandTest {
     }
 
     @Test
-    public void shouldAddBookWithoutUserAndAuthor() throws RequestValidationException {
+    void shouldAddBookWithoutUserAndAuthor() throws RequestValidationException {
         addBookRequest.setUsername(null);
         addBookRequest.setAuthorFirstname(null);
         addBookRequest.setAuthorLastname(null);
@@ -57,7 +57,7 @@ public class AddBookCommandTest {
     }
 
     @Test
-    public void shouldSaveNewAuthorWhenAddingBook() throws RequestValidationException {
+    void shouldSaveNewAuthorWhenAddingBook() throws RequestValidationException {
         when(authorRepository.findAuthorByName(any(String.class), any(String.class))).thenReturn(null);
         Book book = execute(addBookRequest, authorRepository, userRepository);
 
@@ -68,7 +68,7 @@ public class AddBookCommandTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenTitleIsMissing() {
+    void shouldThrowExceptionWhenTitleIsMissing() {
         addBookRequest.setTitle(null);
         RequestValidationException exception =
                 assertThrows(RequestValidationException.class,
@@ -77,7 +77,7 @@ public class AddBookCommandTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenBookConditionIsMissing() {
+    void shouldThrowExceptionWhenBookConditionIsMissing() {
         addBookRequest.setCondition(null);
         RequestValidationException exception =
                 assertThrows(RequestValidationException.class,
@@ -86,7 +86,7 @@ public class AddBookCommandTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenBookConditionIsInvalid() {
+    void shouldThrowExceptionWhenBookConditionIsInvalid() {
         final String INVALID_CONDITION = "HORRIBLE";
         addBookRequest.setCondition(INVALID_CONDITION);
         RequestValidationException exception =

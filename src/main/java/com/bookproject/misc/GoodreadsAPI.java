@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GoodreadsAPI {
 
@@ -49,7 +51,8 @@ public class GoodreadsAPI {
             return fieldValues;
         } catch (IOException | ParserConfigurationException | URISyntaxException | SAXException |
                 XPathExpressionException e) {
-            e.printStackTrace();
+            Logger logger = Logger.getLogger(GoodreadsAPI.class.getName());
+            logger.log(Level.INFO, e.getMessage());
         }
         return null;
     }
