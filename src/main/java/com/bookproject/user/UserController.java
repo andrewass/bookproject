@@ -11,13 +11,19 @@ import java.util.logging.Logger;
 @RestController
 public class UserController {
 
+    private Logger logger = Logger.getLogger(UserController.class.getName());
+
     @Autowired
     private UserRepository userRepository;
 
     @GetMapping("/user/{username}")
     @CrossOrigin(origins = "http://localhost:3000")
-    public User getUserByUsername(@PathVariable String username){
-        return userRepository.findByUsername(username);
+    public ResponseEntity<User> getUserByUsername(@PathVariable String username){
+        User fetchedUser = userRepository.findByUsername(username);
+        if(fetchedUser != null){
+            return new ResponseEntity<>(fetchedUser, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/add-user")
@@ -27,26 +33,24 @@ public class UserController {
             User user = AddUserCommand.execute(request, userRepository);
             return new ResponseEntity<>(userRepository.save(user), HttpStatus.OK);
         } catch (Exception e) {
-            Logger logger = Logger.getLogger(UserController.class.getName());
             logger.log(Level.INFO, e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
-    @GetMapping("/sign-in-user")
+    @PostMapping("/sign-in-user")
     @CrossOrigin(origins = "http://localhost:3000")
-    public ResponseEntity<User> signInUser(@RequestParam String username, @RequestParam String password) {
+    public ResponseEntity<User> signInUser(@RequestBody FetchStoredUserRequest request) {
         try {
-            User user = FetchStoredUserCommand.execute(username, password, userRepository);
+            User user = FetchStoredUserCommand.execute(request, userRepository);
             if (user != null) {
                 return new ResponseEntity<>(user, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
-            Logger logger = Logger.getLogger(UserController.class.getName());
             logger.log(Level.INFO, e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 }

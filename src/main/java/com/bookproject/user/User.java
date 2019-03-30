@@ -45,19 +45,19 @@ public class User {
     private String emailAddress;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "RESIDING_COUNTRY")
-    private Country residingCountry;
+    @Column(name = "COUNTRY")
+    private Country country;
 
     public User() {
     }
 
     public User(String username, String firstName, String lastName,
-                String password, Country residingCountry, String emailAddress) {
+                String password, Country country, String emailAddress) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
-        this.residingCountry = residingCountry;
+        this.country = country;
         this.emailAddress = emailAddress;
         bookCoins = 0.00;
         rating = 6;

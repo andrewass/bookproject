@@ -1,9 +1,7 @@
 package com.bookproject.user;
 
-import com.bookproject.book.Book;
-import com.bookproject.book.BookBuilder;
-import com.bookproject.book.BookCondition;
 import com.bookproject.misc.Country;
+import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,17 +10,15 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
-public class UserControllerTest {
+class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -30,43 +26,125 @@ public class UserControllerTest {
     @MockBean
     private UserRepository userRepository;
 
-    private User testuser;
+    private User testUser;
+
+    private User fetchedUser;
 
     @BeforeEach
-    public void init() {
+    void init() {
         initMocks(this);
-        createUser();
     }
 
     @Test
-    public void shouldFindUserForGivenUsername() throws Exception {
-        when(userRepository.findByUsername(testuser.getUsername())).thenReturn(testuser);
+    void shouldFindUserForGivenUsername() throws Exception {
+        createUserToAdd();
+        when(userRepository.findByUsername(testUser.getUsername())).thenReturn(testUser);
 
-        mockMvc.perform(get("/user/" + testuser.getUsername())
+        mockMvc.perform(get("/user/" + testUser.getUsername())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.username", is(testuser.getUsername())))
-                .andExpect(jsonPath("$.emailAddress", is(testuser.getEmailAddress())))
-                .andExpect(jsonPath("$.residingCountry", is(testuser.getResidingCountry().name())))
-                .andExpect(jsonPath("$.bookList[0].title", is(testuser.getBookList().get(0).getTitle())))
-                .andExpect(jsonPath("$.bookList[0].condition",
-                        is(testuser.getBookList().get(0).getCondition().name())));
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
 
-    private void createUser() {
-        testuser = new User();
-        List<Book> booklist = new ArrayList<>();
-        booklist.add(new BookBuilder().withTitle("Dune")
-                .withCondition(BookCondition.MINT).build());
-        testuser.setBookList(booklist);
-        testuser.setUsername("randomUser");
-        testuser.setEmailAddress("testmail@gmail.com");
-        testuser.setResidingCountry(Country.NORWAY);
+    @Test
+    void shouldReturnStatusNotFoundWhenUserNotExists() throws Exception {
+        createUserToAdd();
+        when(userRepository.findByUsername(testUser.getUsername())).thenReturn(null);
+
+        mockMvc.perform(get("/user/" + testUser.getUsername())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
-    private String getExpectedResult() {
-        return null;
+    @Test
+    void shouldReturnStatusBadRequestWhenUsernameAlreadyExistsWhenAddingUser() throws Exception {
+        createUserToAdd();
+        when(userRepository.findByUsername(testUser.getUsername())).thenReturn(testUser);
+        mockMvc.perform(
+                post("/add-user")
+                        .contentType(MediaType.APPLICATION_JSON).content(createRequestBody()))
+                .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void shouldAddUserFromRequest() throws Exception {
+        createUserToAdd();
+        when(userRepository.findByUsername(testUser.getUsername())).thenReturn(null);
+
+        mockMvc.perform(
+                post("/add-user")
+                        .contentType(MediaType.APPLICATION_JSON).content(createRequestBody()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldReturnStatusBadRequestWhenValidationFailsWhenAddingUser() throws Exception {
+        createUserToAdd();
+        testUser.setCountry(null);
+
+        mockMvc.perform(
+                post("/add-user")
+                        .contentType(MediaType.APPLICATION_JSON).content(createRequestBody()))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldFetchPreviouslyStoredUser() throws Exception {
+        createUserToFetch();
+        createFetchedUser();
+        when(userRepository.findByUsername(testUser.getUsername())).thenReturn(fetchedUser);
+
+        mockMvc.perform(
+                post("/sign-in-user")
+                        .contentType(MediaType.APPLICATION_JSON).content(createRequestBody()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    void shouldReturnStatusNotFoundWhenGivenNonExistingUser() throws Exception {
+        createUserToFetch();
+        when(userRepository.findByUsername(testUser.getUsername())).thenReturn(null);
+
+        mockMvc.perform(
+                post("/sign-in-user")
+                        .contentType(MediaType.APPLICATION_JSON).content(createRequestBody()))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void shouldReturnStatusBadRequestWhenValidationFailsWhenFetchingUser() throws Exception {
+        createUserToFetch();
+        testUser.setUsername(null);
+
+        mockMvc.perform(
+                post("/sign-in-user")
+                        .contentType(MediaType.APPLICATION_JSON).content(createRequestBody()))
+                .andExpect(status().isBadRequest());
+    }
+
+    private String createRequestBody() {
+        Gson gson = new Gson();
+        return gson.toJson(testUser);
+    }
+
+    private void createUserToAdd() {
+        testUser = new User();
+        testUser.setUsername("randomUser");
+        testUser.setEmailAddress("testmail@gmail.com");
+        testUser.setPassword("p@$$woRd1234");
+        testUser.setCountry(Country.NORWAY);
+    }
+
+    private void createUserToFetch() {
+        testUser = new User();
+        testUser.setUsername("randomUser");
+        testUser.setPassword("p@$$woRd1234");
+    }
+
+    private void createFetchedUser() {
+        fetchedUser = new User();
+        fetchedUser.setUsername(testUser.getUsername());
+        fetchedUser.setPassword(UserUtils.getHashedPassword(testUser.getPassword()));
+    }
 }

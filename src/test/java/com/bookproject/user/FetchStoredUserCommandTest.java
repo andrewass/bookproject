@@ -12,10 +12,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class FetchStoredUserCommandTest {
+class FetchStoredUserCommandTest {
 
     private final String USERNAME = "mytestuser";
     private final String PASSWORD = "mytestpassword";
+    private final String INCORRECT_PASSWORD = "p@$$wOrD1234";
 
     @Mock
     UserRepository userRepository;
@@ -23,7 +24,7 @@ public class FetchStoredUserCommandTest {
     private User testUser;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         initMocks(this);
         testUser = new User();
         testUser.setUsername(USERNAME);
@@ -31,38 +32,39 @@ public class FetchStoredUserCommandTest {
     }
 
     @Test
-    public void shouldFetchUserWithMatchingUsernameAndPassword() throws NoSuchAlgorithmException, RequestValidationException,
+    void shouldFetchUserWithMatchingUsernameAndPassword() throws NoSuchAlgorithmException, RequestValidationException,
             InvalidKeySpecException {
         when(userRepository.findByUsername(USERNAME)).thenReturn(testUser);
-        User fetchedUser = FetchStoredUserCommand.execute(USERNAME, PASSWORD, userRepository);
+        User fetchedUser = FetchStoredUserCommand.execute(new FetchStoredUserRequest(USERNAME, PASSWORD), userRepository);
         verify(userRepository, times(1)).findByUsername(USERNAME);
         assertTrue(fetchedUser.getUsername().equals(USERNAME));
     }
 
     @Test
-    public void shouldNotFetchUserWhenPasswordIsIncorrect() throws NoSuchAlgorithmException, RequestValidationException,
+    void shouldNotFetchUserWhenPasswordIsIncorrect() throws NoSuchAlgorithmException, RequestValidationException,
             InvalidKeySpecException {
         when(userRepository.findByUsername(USERNAME)).thenReturn(testUser);
-        User fetchedUser = FetchStoredUserCommand.execute(USERNAME, "incorrectPassword", userRepository);
+        User fetchedUser = FetchStoredUserCommand.execute(new FetchStoredUserRequest(USERNAME, INCORRECT_PASSWORD),
+                userRepository);
         verify(userRepository, times(1)).findByUsername(USERNAME);
         assertNull(fetchedUser);
     }
 
     @Test
-    public void shouldThrowExceptionWhenNoUsernameSpecified() throws NoSuchAlgorithmException, RequestValidationException,
+    void shouldThrowExceptionWhenNoUsernameSpecified() throws NoSuchAlgorithmException, RequestValidationException,
             InvalidKeySpecException {
         when(userRepository.findByUsername(USERNAME)).thenReturn(null);
         assertThrows(RequestValidationException.class, () ->
-                FetchStoredUserCommand.execute(null, PASSWORD, userRepository));
+                FetchStoredUserCommand.execute(new FetchStoredUserRequest(null, PASSWORD), userRepository));
         verify(userRepository, times(0)).findByUsername(USERNAME);
     }
 
     @Test
-    public void shouldThrowExceptionWhenNoPasswordSpecified() throws NoSuchAlgorithmException, RequestValidationException,
+    void shouldThrowExceptionWhenNoPasswordSpecified() throws NoSuchAlgorithmException, RequestValidationException,
             InvalidKeySpecException {
         when(userRepository.findByUsername(USERNAME)).thenReturn(null);
         assertThrows(RequestValidationException.class, () ->
-                FetchStoredUserCommand.execute(USERNAME, null, userRepository));
+                FetchStoredUserCommand.execute(new FetchStoredUserRequest(USERNAME, null), userRepository));
         verify(userRepository, times(0)).findByUsername(USERNAME);
     }
 }

@@ -2,21 +2,19 @@ package com.bookproject.user;
 
 import com.bookproject.exception.RequestValidationException;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-
 import static com.bookproject.user.UserUtils.getHashedPassword;
 
-public class FetchStoredUserCommand {
+class FetchStoredUserCommand {
 
     private FetchStoredUserCommand() {
     }
 
-    static User execute(String username, String password, UserRepository repository) throws RequestValidationException,
-            NoSuchAlgorithmException, InvalidKeySpecException {
-        validate(username, password);
-        User retrievedUser = repository.findByUsername(username);
-        if (retrievedUser == null || !retrievedUser.getPassword().equals(getHashedPassword(password))) {
+    static User execute(FetchStoredUserRequest request, UserRepository repository)
+            throws RequestValidationException {
+        validate(request.getUsername(), request.getPassword());
+        User retrievedUser = repository.findByUsername(request.getUsername());
+        if (retrievedUser == null ||
+                !retrievedUser.getPassword().equals(getHashedPassword(request.getPassword()))) {
             return null;
         }
         return retrievedUser;
