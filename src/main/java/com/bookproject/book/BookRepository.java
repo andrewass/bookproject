@@ -12,5 +12,5 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query(value = "SELECT * FROM T_BOOK b ORDER BY b.DATE_CREATED DESC LIMIT ?1 ", nativeQuery = true)
     List<Book> findRecentlyAddedBooks(Integer count);
 
-    Book findBookByBookId(Long bookId);
+    Book findBookById(Long id);
 }

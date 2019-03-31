@@ -22,6 +22,6 @@ public class AuthorController {
     @CrossOrigin(origins = "http://localhost:3000")
     ResponseEntity<Author> addAuthor(@RequestBody Author author) {
         authorRepository.save(author);
-        return new ResponseEntity<>(author, HttpStatus.CREATED);
+        return new ResponseEntity<>(author, HttpStatus.OK);
     }
 }

@@ -1,6 +1,10 @@
 package com.bookproject.book;
 
 import com.bookproject.author.AuthorRepository;
+import com.bookproject.book.review.AddBookReviewCommand;
+import com.bookproject.book.review.AddReviewRequest;
+import com.bookproject.book.review.BookReview;
+import com.bookproject.book.review.BookReviewRepository;
 import com.bookproject.misc.PropertyUtils;
 import com.bookproject.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +19,13 @@ import java.util.logging.Logger;
 @RestController
 public class BookController {
 
+    Logger logger = Logger.getLogger(BookController.class.getName());
+
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private BookReviewRepository bookReviewRepository;
 
     @Autowired
     private AuthorRepository authorRepository;
@@ -33,9 +42,13 @@ public class BookController {
         return bookRepository.findAll();
     }
 
-    @GetMapping("/book")
+    @GetMapping("/book/{id}")
     @CrossOrigin(origins = "http://localhost:3000")
-    public Book getBookById(@RequestParam Long bookId){ return bookRepository.findBookByBookId(bookId); }
+    public ResponseEntity<Book> getBookById(@PathVariable Long id){
+        Book fetchedBook = bookRepository.findBookById(id);
+        return fetchedBook != null ? new ResponseEntity<>(fetchedBook, HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
     @PostMapping("/add-book")
     @CrossOrigin(origins = "http://localhost:3000")
@@ -45,9 +58,8 @@ public class BookController {
             bookRepository.save(book);
             return new ResponseEntity<>(book, HttpStatus.OK);
         } catch (Exception e) {
-            Logger logger = Logger.getLogger(BookController.class.getName());
             logger.log(Level.INFO, e.getMessage());
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -58,7 +70,16 @@ public class BookController {
             List<Book> recentBooks = FindRecentAddedBooksCommand.execute(count, bookRepository, propertyUtils.getApiKey());
             return new ResponseEntity<>(recentBooks, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            logger.log(Level.INFO, e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PostMapping("/add-book-review")
+    @CrossOrigin(origins = "http://localhost:3000")
+    public ResponseEntity<BookReview> addBookReview(@RequestBody AddReviewRequest request){
+        BookReview review = AddBookReviewCommand.execute(request, userRepository, bookRepository);
+        bookReviewRepository.save(review);
+        return new ResponseEntity<>(review, HttpStatus.OK);
     }
 }

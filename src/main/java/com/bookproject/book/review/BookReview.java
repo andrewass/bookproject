@@ -1,6 +1,5 @@
-package com.bookproject.book;
+package com.bookproject.book.review;
 
-import com.bookproject.author.Author;
 import com.bookproject.user.User;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -15,43 +14,26 @@ import java.util.Date;
 
 @Getter
 @Setter
-@Entity(name = "T_BOOK")
+@Entity(name = "T_BOOK_REVIEW")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id" )
-public class Book implements Serializable {
+public class BookReview implements Serializable {
 
-    private static final long serialVersionUID = -839609830060833611L;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "BOOK_CONDITION", nullable = false)
-    BookCondition condition;
+    private static final long serialVersionUID = -3786479255636334128L;
 
     @Id
     @GeneratedValue
-    @Column(name = "BOOK_ID")
+    @Column(name = "REVIEW_ID")
     private Long id;
 
-    @Column(name = "ISBN")
-    private String isbn;
-
-    @Column(name = "TITLE", nullable = false)
     private String title;
 
     @ManyToOne
-    @JoinColumn(name = "AUTHOR_ID")
-    private Author author;
-
-    @ManyToOne
     @JoinColumn(name = "USER_ID")
-    private User owner;
+    private User user;
 
-    @Column(name = "YEAR_PUBLISHED")
-    private Integer yearPublished;
+    private String review;
 
-    @Column(name = "IMAGE_URL")
-    private String imageUrl;
-
-    @Column(name = "GOODREADS_ID")
-    private Long goodreadsID;
+    private Integer stars;
 
     @CreationTimestamp
     @Column(name = "DATE_CREATED")
@@ -61,6 +43,10 @@ public class Book implements Serializable {
     @Column(name = "DATE_CHANGED")
     private Date dateChanged;
 
-    public Book() {
+    public BookReview(String review, String title) {
+        this.review = review;
+        this.title = title;
     }
+
+    public BookReview(){}
 }

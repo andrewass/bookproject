@@ -1,30 +1,40 @@
 package com.bookproject.user;
 
 import com.bookproject.book.Book;
+import com.bookproject.book.review.BookReview;
 import com.bookproject.misc.Country;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
 @Setter
 @Entity(name = "T_USER")
-public class User {
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id" )
+public class User implements Serializable {
+
+    private static final long serialVersionUID = 4929254147052461693L;
 
     @Id
     @GeneratedValue
     @Column(name = "USER_ID")
-    private Long userId;
+    private Long id;
 
     @Column(nullable = false)
     private String username;
 
     @OneToMany(mappedBy = "owner")
-    @JsonManagedReference
+    //@JsonManagedReference
     private List<Book> bookList;
+
+    @OneToMany(mappedBy = "user")
+    //@JsonManagedReference
+    private List<BookReview> bookReviewList;
 
     @Column(nullable = false)
     private Integer rating;
@@ -61,5 +71,9 @@ public class User {
         this.emailAddress = emailAddress;
         bookCoins = 0.00;
         rating = 6;
+    }
+
+    public void addReview(BookReview bookReview) {
+        bookReviewList.add(bookReview);
     }
 }
