@@ -52,6 +52,7 @@ public class BookController {
             return new ResponseEntity<>(book, HttpStatus.OK);
         } catch (Exception e) {
             logger.log(Level.INFO, e.getMessage());
+            int testline = 44;
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
