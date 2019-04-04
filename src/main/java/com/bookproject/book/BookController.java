@@ -15,6 +15,8 @@ import java.util.logging.Logger;
 @RestController
 public class BookController {
 
+    Logger logger = Logger.getLogger(BookController.class.getName());
+
     @Autowired
     private BookRepository bookRepository;
 
@@ -33,9 +35,13 @@ public class BookController {
         return bookRepository.findAll();
     }
 
-    @GetMapping("/book")
+    @GetMapping("/book/{id}")
     @CrossOrigin(origins = "http://localhost:3000")
-    public Book getBookById(@RequestParam Long bookId){ return bookRepository.findBookByBookId(bookId); }
+    public ResponseEntity<Book> getBookById(@PathVariable Long id) {
+        Book fetchedBook = bookRepository.findBookById(id);
+        return fetchedBook != null ? new ResponseEntity<>(fetchedBook, HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
     @PostMapping("/add-book")
     @CrossOrigin(origins = "http://localhost:3000")
@@ -45,9 +51,8 @@ public class BookController {
             bookRepository.save(book);
             return new ResponseEntity<>(book, HttpStatus.OK);
         } catch (Exception e) {
-            Logger logger = Logger.getLogger(BookController.class.getName());
             logger.log(Level.INFO, e.getMessage());
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -58,7 +63,9 @@ public class BookController {
             List<Book> recentBooks = FindRecentAddedBooksCommand.execute(count, bookRepository, propertyUtils.getApiKey());
             return new ResponseEntity<>(recentBooks, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            logger.log(Level.INFO, e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }
+
