@@ -1,4 +1,4 @@
-package com.bookproject.book.review;
+package com.bookproject.bookreview;
 
 import com.bookproject.user.User;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -43,9 +43,10 @@ public class BookReview implements Serializable {
     @Column(name = "DATE_CHANGED")
     private Date dateChanged;
 
-    public BookReview(String review, String title) {
+    public BookReview(String review, String title, Integer stars){
         this.review = review;
         this.title = title;
+        this.stars = stars;
     }
 
     public BookReview(){}

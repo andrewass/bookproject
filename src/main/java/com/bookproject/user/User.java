@@ -1,7 +1,7 @@
 package com.bookproject.user;
 
 import com.bookproject.book.Book;
-import com.bookproject.book.review.BookReview;
+import com.bookproject.bookreview.BookReview;
 import com.bookproject.misc.Country;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -74,6 +75,9 @@ public class User implements Serializable {
     }
 
     public void addReview(BookReview bookReview) {
+        if(bookReviewList == null){
+            bookReviewList = new ArrayList<>();
+        }
         bookReviewList.add(bookReview);
     }
 }

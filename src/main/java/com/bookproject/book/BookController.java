@@ -1,10 +1,6 @@
 package com.bookproject.book;
 
 import com.bookproject.author.AuthorRepository;
-import com.bookproject.book.review.AddBookReviewCommand;
-import com.bookproject.book.review.AddReviewRequest;
-import com.bookproject.book.review.BookReview;
-import com.bookproject.book.review.BookReviewRepository;
 import com.bookproject.misc.PropertyUtils;
 import com.bookproject.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +21,6 @@ public class BookController {
     private BookRepository bookRepository;
 
     @Autowired
-    private BookReviewRepository bookReviewRepository;
-
-    @Autowired
     private AuthorRepository authorRepository;
 
     @Autowired
@@ -44,7 +37,7 @@ public class BookController {
 
     @GetMapping("/book/{id}")
     @CrossOrigin(origins = "http://localhost:3000")
-    public ResponseEntity<Book> getBookById(@PathVariable Long id){
+    public ResponseEntity<Book> getBookById(@PathVariable Long id) {
         Book fetchedBook = bookRepository.findBookById(id);
         return fetchedBook != null ? new ResponseEntity<>(fetchedBook, HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -74,12 +67,5 @@ public class BookController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
-    @PostMapping("/add-book-review")
-    @CrossOrigin(origins = "http://localhost:3000")
-    public ResponseEntity<BookReview> addBookReview(@RequestBody AddReviewRequest request){
-        BookReview review = AddBookReviewCommand.execute(request, userRepository, bookRepository);
-        bookReviewRepository.save(review);
-        return new ResponseEntity<>(review, HttpStatus.OK);
-    }
 }
+

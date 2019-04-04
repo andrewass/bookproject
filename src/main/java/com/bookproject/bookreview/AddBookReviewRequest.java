@@ -1,9 +1,9 @@
-package com.bookproject.book.review;
+package com.bookproject.bookreview;
 
 import lombok.Data;
 
 @Data
-public class AddReviewRequest {
+public class AddBookReviewRequest {
 
     String review;
 
