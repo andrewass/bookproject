@@ -12,13 +12,13 @@ import java.util.List;
 public class BookReviewController {
 
     @Autowired
-    BookReviewRepository bookReviewRepository;
+    private BookReviewRepository bookReviewRepository;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @PostMapping("/add-book-review")
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<BookReview> addBookReview(@RequestBody AddBookReviewRequest request){
         BookReview review = AddBookReviewCommand.execute(request, userRepository);
         bookReviewRepository.save(review);
@@ -26,7 +26,7 @@ public class BookReviewController {
     }
 
     @GetMapping("/book-review/{title}")
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<List<BookReview>> getBookById(@PathVariable String title){
         List<BookReview> fetchedReviews = bookReviewRepository.findAllBookReviewsWithTitle(title);
         return !fetchedReviews.isEmpty() ?

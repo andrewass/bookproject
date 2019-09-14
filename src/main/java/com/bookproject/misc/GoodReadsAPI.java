@@ -3,6 +3,8 @@ package com.bookproject.misc;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -23,13 +25,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public class GoodreadsAPI {
 
-    private GoodreadsAPI() {
-    }
+public class GoodReadsAPI {
+
+    private GoodReadsAPI() { }
 
     public static Map<String, String> getFieldsForBook(String bookTitle, String apiKey) {
         try {
@@ -42,7 +42,7 @@ public class GoodreadsAPI {
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("GET");
             if (httpURLConnection.getResponseCode() == 200) {
-                String xmlResponse = getXMLfromResponse(httpURLConnection);
+                String xmlResponse = getXmlFromResponse(httpURLConnection);
                 fieldValues.put("goodreads_id", fetchValueFromXML(
                         "/GoodreadsResponse/search/results/work/id", xmlResponse));
                 fieldValues.put("image_url", fetchValueFromXML(
@@ -51,13 +51,13 @@ public class GoodreadsAPI {
             return fieldValues;
         } catch (IOException | ParserConfigurationException | URISyntaxException | SAXException |
                 XPathExpressionException e) {
-            Logger logger = Logger.getLogger(GoodreadsAPI.class.getName());
-            logger.log(Level.INFO, e.getMessage());
+            Logger logger = LoggerFactory.getLogger(GoodReadsAPI.class);
+            logger.error(e.getMessage());
         }
         return null;
     }
 
-    private static String getXMLfromResponse(HttpURLConnection httpURLConnection) throws IOException {
+    private static String getXmlFromResponse(HttpURLConnection httpURLConnection) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
         StringBuilder builder = new StringBuilder();
         builder.append(reader.readLine());

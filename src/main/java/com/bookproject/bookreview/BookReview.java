@@ -3,18 +3,19 @@ package com.bookproject.bookreview;
 import com.bookproject.user.User;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
-@Getter
-@Setter
-@Entity(name = "T_BOOK_REVIEW")
+@Data
+@Entity
+@Table(name = "T_BOOK_REVIEW")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id" )
 public class BookReview implements Serializable {
 
@@ -37,17 +38,17 @@ public class BookReview implements Serializable {
 
     @CreationTimestamp
     @Column(name = "DATE_CREATED")
-    private Date dateCreated;
+    private LocalDateTime dateCreated;
 
     @UpdateTimestamp
     @Column(name = "DATE_CHANGED")
-    private Date dateChanged;
+    private LocalDateTime dateChanged;
 
-    public BookReview(String review, String title, Integer stars){
+    BookReview(String review, String title, Integer stars){
         this.review = review;
         this.title = title;
         this.stars = stars;
     }
 
-    public BookReview(){}
+    BookReview(){}
 }

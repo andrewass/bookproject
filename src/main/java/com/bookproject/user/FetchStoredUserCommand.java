@@ -6,8 +6,7 @@ import static com.bookproject.user.UserUtils.getHashedPassword;
 
 class FetchStoredUserCommand {
 
-    private FetchStoredUserCommand() {
-    }
+    private FetchStoredUserCommand() {}
 
     static User execute(FetchStoredUserRequest request, UserRepository repository)
             throws RequestValidationException {
@@ -20,6 +19,12 @@ class FetchStoredUserCommand {
         return retrievedUser;
     }
 
+    /**
+     *
+     * @param username
+     * @param password
+     * @throws RequestValidationException
+     */
     private static void validate(String username, String password) throws RequestValidationException {
         if (username == null) {
             throw new RequestValidationException("Username not specified during User retrieval");

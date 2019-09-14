@@ -10,8 +10,7 @@ import java.util.Arrays;
 
 public class AddBookCommand {
 
-    private AddBookCommand() {
-    }
+    private AddBookCommand() { }
 
     public static Book execute(AddBookRequest request, AuthorRepository authorRepository, UserRepository userRepository)
             throws RequestValidationException {

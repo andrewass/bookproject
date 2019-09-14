@@ -1,6 +1,8 @@
 package com.bookproject.book;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
 class AddBookRequest {

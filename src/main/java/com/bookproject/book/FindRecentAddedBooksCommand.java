@@ -3,7 +3,7 @@ package com.bookproject.book;
 import java.util.List;
 import java.util.Map;
 
-import static com.bookproject.misc.GoodreadsAPI.getFieldsForBook;
+import static com.bookproject.misc.GoodReadsAPI.getFieldsForBook;
 
 public class FindRecentAddedBooksCommand {
 

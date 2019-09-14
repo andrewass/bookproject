@@ -3,18 +3,21 @@ package com.bookproject.user;
 import com.bookproject.book.Book;
 import com.bookproject.bookreview.BookReview;
 import com.bookproject.misc.Country;
+import com.bookproject.userreview.UserReview;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Entity(name = "T_USER")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id" )
 public class User implements Serializable {
@@ -30,14 +33,20 @@ public class User implements Serializable {
     private String username;
 
     @OneToMany(mappedBy = "owner")
-    //@JsonManagedReference
     private List<Book> bookList;
 
     @OneToMany(mappedBy = "user")
-    //@JsonManagedReference
     private List<BookReview> bookReviewList;
 
+    @OneToMany(mappedBy = "reviewed")
+    private List<UserReview> reviewedList;
+
+    @OneToMany(mappedBy = "reviewer")
+    private List<UserReview> reviewerList;
+
     @Column(nullable = false)
+    @Max(value = 10L)
+    @Min(value = 0L)
     private Integer rating;
 
     @Column(name = "FIRST_NAME", nullable = false)
@@ -49,9 +58,6 @@ public class User implements Serializable {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private Double bookCoins;
-
     @Column(name = "EMAIL_ADDRESS", nullable = false)
     private String emailAddress;
 
@@ -59,8 +65,7 @@ public class User implements Serializable {
     @Column(name = "COUNTRY")
     private Country country;
 
-    public User() {
-    }
+    public User(){}
 
     public User(String username, String firstName, String lastName,
                 String password, Country country, String emailAddress) {
@@ -70,7 +75,6 @@ public class User implements Serializable {
         this.password = password;
         this.country = country;
         this.emailAddress = emailAddress;
-        bookCoins = 0.00;
         rating = 6;
     }
 

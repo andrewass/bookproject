@@ -4,6 +4,7 @@ import com.bookproject.author.Author;
 import com.bookproject.user.User;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -11,12 +12,13 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@Entity(name = "T_BOOK")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id" )
+@Data
+@Entity
+@Table(name = "T_BOOK")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Book implements Serializable {
 
     private static final long serialVersionUID = -839609830060833611L;
@@ -55,12 +57,10 @@ public class Book implements Serializable {
 
     @CreationTimestamp
     @Column(name = "DATE_CREATED")
-    private Date dateCreated;
+    private LocalDateTime dateCreated;
 
     @UpdateTimestamp
     @Column(name = "DATE_CHANGED")
-    private Date dateChanged;
+    private LocalDateTime dateChanged;
 
-    public Book() {
-    }
 }

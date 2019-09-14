@@ -19,7 +19,7 @@ public class AuthorController {
     }
 
     @PostMapping("/add-author")
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "*")
     ResponseEntity<Author> addAuthor(@RequestBody Author author) {
         authorRepository.save(author);
         return new ResponseEntity<>(author, HttpStatus.OK);
