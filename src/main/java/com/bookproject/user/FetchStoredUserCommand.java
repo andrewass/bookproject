@@ -8,12 +8,18 @@ class FetchStoredUserCommand {
 
     private FetchStoredUserCommand() {}
 
-    static User execute(FetchStoredUserRequest request, UserRepository repository)
+    /**
+     *
+     * @param request
+     * @param repository
+     * @return
+     * @throws RequestValidationException
+     */
+    static User execute(SignInRequest request, UserRepository repository)
             throws RequestValidationException {
-        validate(request.getUsername(), request.getPassword());
+        validateSignInRequest(request.getUsername(), request.getPassword());
         User retrievedUser = repository.findByUsername(request.getUsername());
-        if (retrievedUser == null ||
-                !retrievedUser.getPassword().equals(getHashedPassword(request.getPassword()))) {
+        if (retrievedUser == null || !retrievedUser.getPassword().equals(getHashedPassword(request.getPassword()))) {
             return null;
         }
         return retrievedUser;
@@ -25,7 +31,7 @@ class FetchStoredUserCommand {
      * @param password
      * @throws RequestValidationException
      */
-    private static void validate(String username, String password) throws RequestValidationException {
+    private static void validateSignInRequest(String username, String password) throws RequestValidationException {
         if (username == null) {
             throw new RequestValidationException("Username not specified during User retrieval");
         }

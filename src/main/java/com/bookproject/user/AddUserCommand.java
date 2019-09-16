@@ -11,8 +11,7 @@ import static com.bookproject.user.UserUtils.getHashedPassword;
 
 class AddUserCommand {
 
-    private AddUserCommand() {
-    }
+    private AddUserCommand() { }
 
     static User execute(AddUserRequest request, UserRepository repository) throws RequestValidationException,
             NoSuchAlgorithmException {

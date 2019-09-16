@@ -1,11 +1,9 @@
 package com.bookproject.userreview;
 
+import com.bookproject.user.User;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -16,4 +14,7 @@ public class UserReview {
     @GeneratedValue
     private Long id;
 
+    private User reviewed;
+
+    private User reviewer;
 }

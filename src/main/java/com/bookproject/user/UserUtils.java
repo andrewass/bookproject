@@ -9,4 +9,5 @@ class UserUtils {
     static String getHashedPassword(String password) {
         return DigestUtils.sha1Hex(password);
     }
+
 }

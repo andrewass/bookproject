@@ -35,7 +35,7 @@ class FetchStoredUserCommandTest {
     void shouldFetchUserWithMatchingUsernameAndPassword() throws NoSuchAlgorithmException, RequestValidationException,
             InvalidKeySpecException {
         when(userRepository.findByUsername(USERNAME)).thenReturn(testUser);
-        User fetchedUser = FetchStoredUserCommand.execute(new FetchStoredUserRequest(USERNAME, PASSWORD), userRepository);
+        User fetchedUser = FetchStoredUserCommand.execute(new SignInRequest(USERNAME, PASSWORD), userRepository);
         verify(userRepository, times(1)).findByUsername(USERNAME);
         assertTrue(fetchedUser.getUsername().equals(USERNAME));
     }
@@ -44,7 +44,7 @@ class FetchStoredUserCommandTest {
     void shouldNotFetchUserWhenPasswordIsIncorrect() throws NoSuchAlgorithmException, RequestValidationException,
             InvalidKeySpecException {
         when(userRepository.findByUsername(USERNAME)).thenReturn(testUser);
-        User fetchedUser = FetchStoredUserCommand.execute(new FetchStoredUserRequest(USERNAME, INCORRECT_PASSWORD),
+        User fetchedUser = FetchStoredUserCommand.execute(new SignInRequest(USERNAME, INCORRECT_PASSWORD),
                 userRepository);
         verify(userRepository, times(1)).findByUsername(USERNAME);
         assertNull(fetchedUser);
@@ -55,7 +55,7 @@ class FetchStoredUserCommandTest {
             InvalidKeySpecException {
         when(userRepository.findByUsername(USERNAME)).thenReturn(null);
         assertThrows(RequestValidationException.class, () ->
-                FetchStoredUserCommand.execute(new FetchStoredUserRequest(null, PASSWORD), userRepository));
+                FetchStoredUserCommand.execute(new SignInRequest(null, PASSWORD), userRepository));
         verify(userRepository, times(0)).findByUsername(USERNAME);
     }
 
@@ -64,7 +64,7 @@ class FetchStoredUserCommandTest {
             InvalidKeySpecException {
         when(userRepository.findByUsername(USERNAME)).thenReturn(null);
         assertThrows(RequestValidationException.class, () ->
-                FetchStoredUserCommand.execute(new FetchStoredUserRequest(USERNAME, null), userRepository));
+                FetchStoredUserCommand.execute(new SignInRequest(USERNAME, null), userRepository));
         verify(userRepository, times(0)).findByUsername(USERNAME);
     }
 }

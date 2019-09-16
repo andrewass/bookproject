@@ -57,16 +57,6 @@ class UserControllerTest {
     }
 
     @Test
-    void shouldReturnStatusBadRequestWhenUsernameAlreadyExistsWhenAddingUser() throws Exception {
-        createUserToAdd();
-        when(userRepository.findByUsername(testUser.getUsername())).thenReturn(testUser);
-        mockMvc.perform(
-                post("/add-user")
-                        .contentType(MediaType.APPLICATION_JSON).content(createRequestBody()))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
     void shouldAddUserFromRequest() throws Exception {
         createUserToAdd();
         when(userRepository.findByUsername(testUser.getUsername())).thenReturn(null);
@@ -74,18 +64,7 @@ class UserControllerTest {
         mockMvc.perform(
                 post("/add-user")
                         .contentType(MediaType.APPLICATION_JSON).content(createRequestBody()))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void shouldReturnStatusBadRequestWhenValidationFailsWhenAddingUser() throws Exception {
-        createUserToAdd();
-        testUser.setCountry(null);
-
-        mockMvc.perform(
-                post("/add-user")
-                        .contentType(MediaType.APPLICATION_JSON).content(createRequestBody()))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isCreated());
     }
 
     @Test
