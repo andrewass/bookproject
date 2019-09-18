@@ -8,9 +8,9 @@ import com.bookproject.user.UserRepository;
 
 import java.util.Arrays;
 
-public class AddBookCommand {
+public class BookUtils {
 
-    private AddBookCommand() { }
+    private BookUtils() { }
 
     public static Book execute(AddBookRequest request, AuthorRepository authorRepository, UserRepository userRepository)
             throws RequestValidationException {
@@ -20,8 +20,8 @@ public class AddBookCommand {
         return new BookBuilder()
                 .withTitle(request.getTitle())
                 .withCondition(BookCondition.valueOf(request.getCondition().toUpperCase()))
-                .withAuthor(author)
                 .withOwner(user)
+                .withAuthor(author)
                 .withPublishedYear(request.getPublishedYear())
                 .build();
     }

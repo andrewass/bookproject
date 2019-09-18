@@ -14,7 +14,11 @@ public class UserReview {
     @GeneratedValue
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "REVIEWED")
     private User reviewed;
 
+    @ManyToOne
+    @JoinColumn(name = "REVIEWER")
     private User reviewer;
 }

@@ -1,14 +1,11 @@
 package com.bookproject.user;
 
-import com.bookproject.book.Book;
 import com.bookproject.bookreview.BookReview;
 import com.bookproject.misc.Country;
 import com.bookproject.userreview.UserReview;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -20,9 +17,7 @@ import java.util.List;
 @Data
 @Entity(name = "T_USER")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id" )
-public class User implements Serializable {
-
-    private static final long serialVersionUID = 4929254147052461693L;
+public class User {
 
     @Id
     @GeneratedValue
@@ -33,7 +28,7 @@ public class User implements Serializable {
     private String username;
 
     @OneToMany(mappedBy = "owner")
-    private List<Book> bookList;
+    private List<com.bookproject.book.Book> bookList;
 
     @OneToMany(mappedBy = "user")
     private List<BookReview> bookReviewList;

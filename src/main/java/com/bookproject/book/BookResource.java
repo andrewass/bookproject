@@ -1,6 +1,7 @@
 package com.bookproject.book;
 
 import com.bookproject.author.Author;
+import lombok.Data;
 import lombok.Getter;
 import org.springframework.hateoas.ResourceSupport;
 

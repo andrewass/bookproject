@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Slf4j
 @RestController
 public class UserController {
 
@@ -35,16 +34,11 @@ public class UserController {
     @CrossOrigin(origins = "*")
     public ResponseEntity<User> signInUser(@RequestBody SignInRequest request)  {
         User user = null;
-        try {
-            user = FetchStoredUserCommand.execute(request, userRepository);
-            if(user != null){
-                return new ResponseEntity<>(user, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        } catch (RequestValidationException e) {
-            log.error("Request Validation Exception "+e.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        user = null;
+        if(user != null){
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }

@@ -1,15 +1,16 @@
 package com.bookproject.bookreview;
 
+import com.bookproject.user.UserResource;
 import lombok.Getter;
 import org.springframework.hateoas.ResourceSupport;
 
 @Getter
-public class BookReviewResource extends ResourceSupport {
+class BookResource extends ResourceSupport {
 
-    private String username;
+    private UserResource user;
     private String review;
 
-    BookReviewResource(BookReview bookReview){
+    BookResource(BookReview bookReview){
 
     }
 

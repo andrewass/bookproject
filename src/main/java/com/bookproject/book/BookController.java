@@ -4,18 +4,16 @@ import com.bookproject.author.AuthorRepository;
 import com.bookproject.exception.RequestValidationException;
 import com.bookproject.misc.PropertyUtils;
 import com.bookproject.user.UserRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.bookproject.book.AddBookCommand.execute;
-
-@Slf4j
 @RestController
+@RequestMapping(value = "/books")
 public class BookController {
 
     @Autowired
@@ -30,26 +28,37 @@ public class BookController {
     @Autowired
     private PropertyUtils propertyUtils;
 
+    @Autowired
+    private BookResourceAssembler bookResourceAssembler;
+
     @GetMapping(value = "/all-books")
     @CrossOrigin(origins = "*")
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+    public ResponseEntity<Resources<BookResource>> getAllBooks() {
+        List<Book> books = bookRepository.findAll();
+        List<BookResource> resourcesList = bookResourceAssembler.toResources(books);
+        Resources<BookResource> resources = new Resources<>(resourcesList);
+        return ResponseEntity.ok(resources);
     }
 
-    @GetMapping("/book/{id}")
+    @GetMapping("/{id}")
     @CrossOrigin(origins = "*")
-    public ResponseEntity<Book> getBookById(@PathVariable Long id) {
+    public ResponseEntity<BookResource> getBookById(@PathVariable Long id) {
         Book fetchedBook = bookRepository.findBookById(id);
-        return fetchedBook != null ? new ResponseEntity<>(fetchedBook, HttpStatus.OK) :
-                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (fetchedBook != null) {
+            BookResource bookResource = bookResourceAssembler.toResource(fetchedBook);
+            return ResponseEntity.ok(bookResource);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/add-book")
     @CrossOrigin(origins = "*")
-    public ResponseEntity<Book> addBook(@RequestBody AddBookRequest request) throws RequestValidationException {
-        Book book = execute(request, authorRepository, userRepository);
+    public ResponseEntity<BookResource> addBook(@RequestBody Book book) throws RequestValidationException {
+        //Book book = execute(request, authorRepository, userRepository);
         bookRepository.save(book);
-        return new ResponseEntity<>(book, HttpStatus.OK);
+        BookResource resource = bookResourceAssembler.toResource(book);
+        return ResponseEntity.ok(resource);
     }
 
     @GetMapping("/recent-books")

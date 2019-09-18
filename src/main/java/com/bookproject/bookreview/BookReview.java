@@ -1,5 +1,6 @@
 package com.bookproject.bookreview;
 
+import com.bookproject.book.Book;
 import com.bookproject.user.User;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -29,8 +30,12 @@ public class BookReview implements Serializable {
     private String title;
 
     @ManyToOne
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "USER")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "BOOK")
+    private com.bookproject.book.Book book;
 
     private String review;
 

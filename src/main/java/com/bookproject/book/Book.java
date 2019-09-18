@@ -32,18 +32,15 @@ public class Book implements Serializable {
     @Column(name = "BOOK_ID")
     private Long id;
 
-    @Column(name = "ISBN")
-    private String isbn;
-
     @Column(name = "TITLE", nullable = false)
     private String title;
 
     @ManyToOne
-    @JoinColumn(name = "AUTHOR_ID")
+    @JoinColumn(name = "AUTHOR")
     private Author author;
 
     @ManyToOne
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "USER")
     private User owner;
 
     @Column(name = "YEAR_PUBLISHED")
@@ -60,7 +57,7 @@ public class Book implements Serializable {
     private LocalDateTime dateCreated;
 
     @UpdateTimestamp
-    @Column(name = "DATE_CHANGED")
-    private LocalDateTime dateChanged;
+    @Column(name = "DATE_UPDATED")
+    private LocalDateTime dateUpdated;
 
 }
