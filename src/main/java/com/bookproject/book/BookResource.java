@@ -1,7 +1,7 @@
 package com.bookproject.book;
 
-import com.bookproject.author.Author;
-import lombok.Data;
+import com.bookproject.user.UserResource;
+import com.bookproject.user.UserResourceAssembler;
 import lombok.Getter;
 import org.springframework.hateoas.ResourceSupport;
 
@@ -9,10 +9,11 @@ import org.springframework.hateoas.ResourceSupport;
 public class BookResource extends ResourceSupport {
 
     private String title;
-    private Author author;
+    private UserResource user;
 
-    public BookResource(Book book){
+    BookResource(Book book) {
+        UserResourceAssembler userResourceAssembler = new UserResourceAssembler();
         title = book.getTitle();
-        author = book.getAuthor();
+        user = userResourceAssembler.toResource(book.getOwner());
     }
 }

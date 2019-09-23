@@ -4,8 +4,12 @@ import com.bookproject.bookreview.BookReview;
 import com.bookproject.misc.Country;
 import com.bookproject.userreview.UserReview;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -14,7 +18,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity(name = "T_USER")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id" )
 public class User {
@@ -28,26 +33,18 @@ public class User {
     private String username;
 
     @OneToMany(mappedBy = "owner")
+    @JsonIgnoreProperties("owner")
     private List<com.bookproject.book.Book> bookList;
-
-    @OneToMany(mappedBy = "user")
-    private List<BookReview> bookReviewList;
-
-    @OneToMany(mappedBy = "reviewed")
-    private List<UserReview> reviewedList;
-
-    @OneToMany(mappedBy = "reviewer")
-    private List<UserReview> reviewerList;
 
     @Column(nullable = false)
     @Max(value = 10L)
     @Min(value = 0L)
     private Integer rating;
 
-    @Column(name = "FIRST_NAME", nullable = false)
+    @Column(name = "FIRST_NAME")
     private String firstName;
 
-    @Column(name = "LAST_NAME", nullable = false)
+    @Column(name = "LAST_NAME")
     private String lastName;
 
     @Column(nullable = false)
@@ -57,26 +54,9 @@ public class User {
     private String emailAddress;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "COUNTRY")
+    @Column(name = "RESIDING_COUNTRY")
     private Country country;
 
     public User(){}
 
-    public User(String username, String firstName, String lastName,
-                String password, Country country, String emailAddress) {
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.password = password;
-        this.country = country;
-        this.emailAddress = emailAddress;
-        rating = 6;
-    }
-
-    public void addReview(BookReview bookReview) {
-        if(bookReviewList == null){
-            bookReviewList = new ArrayList<>();
-        }
-        bookReviewList.add(bookReview);
-    }
 }

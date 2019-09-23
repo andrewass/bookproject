@@ -1,6 +1,5 @@
 package com.bookproject.book;
 
-import com.bookproject.author.AuthorRepository;
 import com.bookproject.exception.RequestValidationException;
 import com.bookproject.misc.PropertyUtils;
 import com.bookproject.user.UserRepository;
@@ -20,16 +19,12 @@ public class BookController {
     private BookRepository bookRepository;
 
     @Autowired
-    private AuthorRepository authorRepository;
-
-    @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private PropertyUtils propertyUtils;
 
-    @Autowired
-    private BookResourceAssembler bookResourceAssembler;
+    private BookResourceAssembler bookResourceAssembler = new BookResourceAssembler();
 
     @GetMapping(value = "/all-books")
     @CrossOrigin(origins = "*")
@@ -55,7 +50,6 @@ public class BookController {
     @PostMapping("/add-book")
     @CrossOrigin(origins = "*")
     public ResponseEntity<BookResource> addBook(@RequestBody Book book) throws RequestValidationException {
-        //Book book = execute(request, authorRepository, userRepository);
         bookRepository.save(book);
         BookResource resource = bookResourceAssembler.toResource(book);
         return ResponseEntity.ok(resource);

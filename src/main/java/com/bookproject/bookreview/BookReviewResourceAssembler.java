@@ -2,15 +2,15 @@ package com.bookproject.bookreview;
 
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 
-public class BookReviewResourceAssembler extends ResourceAssemblerSupport<BookReview, BookResource> {
+public class BookReviewResourceAssembler extends ResourceAssemblerSupport<BookReview, BookReviewResource> {
 
     public BookReviewResourceAssembler(Class<BookReviewController> bookReviewController,
-                                       Class<BookResource> bookReviewResource) {
+                                       Class<BookReviewResource> bookReviewResource) {
         super(bookReviewController, bookReviewResource);
     }
 
     @Override
-    public BookResource toResource(BookReview bookReview) {
+    public BookReviewResource toResource(BookReview bookReview) {
         return createResourceWithId(bookReview.getId(), bookReview);
     }
 }

@@ -1,13 +1,11 @@
 package com.bookproject.book;
 
-import com.bookproject.author.Author;
 import com.bookproject.user.User;
 
 public class BookBuilder {
 
     private String title;
     private User owner;
-    private Author author;
     private BookCondition bookCondition;
     private Integer publishedYear;
 
@@ -27,11 +25,6 @@ public class BookBuilder {
         return this;
     }
 
-    public BookBuilder withAuthor(Author author) {
-        this.author = author;
-        return this;
-    }
-
     public BookBuilder withPublishedYear(Integer publishedYear) {
         this.publishedYear = publishedYear;
         return this;
@@ -40,7 +33,6 @@ public class BookBuilder {
     public Book build() {
         Book book = new Book();
         book.setTitle(this.title);
-        book.setAuthor(this.author);
         book.setCondition(this.bookCondition);
         book.setOwner(this.owner);
         book.setYearPublished(this.publishedYear);

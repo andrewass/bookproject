@@ -1,10 +1,9 @@
 package com.bookproject.book;
 
-import com.bookproject.author.Author;
 import com.bookproject.user.User;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -12,10 +11,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "T_BOOK")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -35,9 +34,7 @@ public class Book implements Serializable {
     @Column(name = "TITLE", nullable = false)
     private String title;
 
-    @ManyToOne
-    @JoinColumn(name = "AUTHOR")
-    private Author author;
+    private String author;
 
     @ManyToOne
     @JoinColumn(name = "USER")

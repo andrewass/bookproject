@@ -11,7 +11,6 @@ public class AddBookReviewCommand {
             User user = userRepository.findUserById(request.getUserId());
             if (user != null) {
                 bookReview.setUser(user);
-                user.addReview(bookReview);
             }
         }
         return bookReview;

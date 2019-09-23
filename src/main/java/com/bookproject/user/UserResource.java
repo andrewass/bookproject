@@ -9,7 +9,7 @@ public class UserResource extends ResourceSupport {
     private String username;
     private String emailAddress;
 
-    public UserResource(User user){
+    UserResource(User user){
         username = user.getUsername();
         emailAddress = user.getEmailAddress();
     }

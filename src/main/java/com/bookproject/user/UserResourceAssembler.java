@@ -1,17 +1,15 @@
 package com.bookproject.user;
 
-import com.bookproject.book.Book;
-import com.bookproject.book.BookResource;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 
 public class UserResourceAssembler extends ResourceAssemblerSupport<User, UserResource> {
 
-    public UserResourceAssembler(Class<UserController> userController, Class<UserResource> userResource) {
-        super(userController, userResource);
+    public UserResourceAssembler() {
+        super(UserController.class, UserResource.class);
     }
 
     @Override
-    protected UserResource instantiateResource(User user){
+    protected UserResource instantiateResource(User user) {
         return new UserResource(user);
     }
 

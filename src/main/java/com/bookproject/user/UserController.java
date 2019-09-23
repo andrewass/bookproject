@@ -3,9 +3,13 @@ package com.bookproject.user;
 import com.bookproject.exception.RequestValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
 @RestController
 public class UserController {
@@ -13,14 +17,21 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    private UserResourceAssembler userResourceAssembler = new UserResourceAssembler();
+
     @GetMapping("/user/{username}")
     @CrossOrigin(origins = "*")
-    public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
-        User fetchedUser = userRepository.findByUsername(username);
-        if (fetchedUser != null) {
-            return new ResponseEntity<>(fetchedUser, HttpStatus.OK);
+    public ResponseEntity<UserResource> getUserByUsername(@PathVariable String username) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            ResponseEntity<UserResource> userResourceResponseEntity = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return userResourceResponseEntity;
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        UserResource userResource = userResourceAssembler.toResource(user);
+        userResource.add(
+                linkTo(methodOn(UserController.class).getUserByUsername(username))
+                .withSelfRel());
+        return new ResponseEntity<>(userResource, HttpStatus.OK);
     }
 
     @PostMapping("/add-user")
@@ -34,7 +45,6 @@ public class UserController {
     @CrossOrigin(origins = "*")
     public ResponseEntity<User> signInUser(@RequestBody SignInRequest request)  {
         User user = null;
-        user = null;
         if(user != null){
             return new ResponseEntity<>(user, HttpStatus.OK);
         } else {
